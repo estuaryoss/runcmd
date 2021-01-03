@@ -1,6 +1,6 @@
-module github.com/dinuta/run
+module github.com/dinuta/runcmd
 
-go 1.14
+go 1.13
 
 require (
 	github.com/dinuta/estuary-agent-go v0.0.0-20210102145329-e738d9031244

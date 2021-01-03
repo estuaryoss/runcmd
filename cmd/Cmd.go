@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/dinuta/estuary-agent-go/src/command"
 	"github.com/dinuta/estuary-agent-go/src/models"
-	"github.com/dinuta/run/constants"
-	"github.com/dinuta/run/utils"
+	"github.com/dinuta/estuary-agent-go/src/utils"
+	"github.com/dinuta/runcmd/constants"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -20,7 +20,7 @@ var (
 	arguments string
 
 	rootCmd = &cobra.Command{
-		Use:     "run",
+		Use:     "runcmd",
 		Short:   "A CLI runner which runs your system commands and outputs the results in JSON",
 		Long:    `The CLI runs your system commands (linux/windows) sequentially and it outputs the results both in stdout and in JSON file`,
 		Version: "v1.0.0",
