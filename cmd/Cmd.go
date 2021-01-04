@@ -4,20 +4,22 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/dinuta/estuary-agent-go/src/command"
-	"github.com/dinuta/estuary-agent-go/src/models"
-	"github.com/dinuta/estuary-agent-go/src/utils"
-	"github.com/dinuta/runcmd/constants"
+	"github.com/estuaryoss/estuary-agent-go/src/command"
+	"github.com/estuaryoss/estuary-agent-go/src/models"
+	"github.com/estuaryoss/estuary-agent-go/src/utils"
+	"github.com/estuaryoss/runcmd/constants"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"strconv"
 	"strings"
 )
 
 var (
 	// Used for flags.
-	cid       string
-	arguments string
+	cid           string
+	arguments     string
+	enableStreams bool
 
 	rootCmd = &cobra.Command{
 		Use:     "runcmd",
@@ -33,7 +35,8 @@ var (
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			//viper args
-			utils.AppendFile("command_info_logger.txt", cmd.Use+" --cid="+cid+" --args=\""+arguments+"\"\n")
+			utils.AppendFile("command_info_logger.txt",
+				cmd.Use+" --cid="+cid+" --args=\""+arguments+"\""+"--enableStreams="+strconv.FormatBool(enableStreams)+"\n")
 			utils.CreateDir(constants.CMD_BACKGROUND_DIR)
 			utils.CreateDir(constants.CMD_BACKGROUND_STREAMS_DIR)
 			outputJsonFile := fmt.Sprintf(constants.CMD_BACKGROUND_OUTPUT, cid)
@@ -44,7 +47,7 @@ var (
 			}
 			utils.WriteFile(outputJsonFile, cdJson)
 
-			command := command.NewCommand(cid, outputJsonFile)
+			command := command.NewCommand(cid, outputJsonFile, enableStreams)
 			cd = command.RunCommands(strings.Split(arguments, ";;"))
 			cdJson, err = json.Marshal(cd)
 			if err != nil {
@@ -75,11 +78,15 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&cid, "cid", "c", "none", "E.g. --cid 2 [Not mandatory]")
+	rootCmd.PersistentFlags().StringVarP(&cid, "cid", "c", "none",
+		"The Id of the command. E.g. --cid 2 [Not mandatory]")
 	rootCmd.PersistentFlags().StringVarP(&arguments, "args", "a", "",
-		"E.g. --args \"ls;;pwd;;echo2\" [Mandatory]")
+		"The commands separated by ';;'. E.g. --args \"ls;;pwd;;echo2\" [Mandatory]")
+	rootCmd.PersistentFlags().BoolVarP(&enableStreams, "enableStreams", "e", false,
+		"Whenever to enable the .out and .err files for each command in 'streams' folder. E.g. --enableStreams false [Not Mandatory]")
 	rootCmd.MarkFlagRequired("args")
 
 	viper.BindPFlag("cid", rootCmd.PersistentFlags().Lookup("cid"))
 	viper.BindPFlag("args", rootCmd.PersistentFlags().Lookup("args"))
+	viper.BindPFlag("enableStreams", rootCmd.PersistentFlags().Lookup("enableStreams"))
 }

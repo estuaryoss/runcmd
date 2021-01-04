@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dinuta/runcmd/cmd"
+	"github.com/estuaryoss/runcmd/cmd"
 )
 
 func main() {
