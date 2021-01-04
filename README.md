@@ -1,5 +1,5 @@
 Used as command runner for the commands running in background
-for [Estuary-Agent](https://github.com/dinuta/estuary-agent)
+for [Estuary-Agent](https://github.com/estuaryoss/estuary-agent)
 
 ## runcmd
 

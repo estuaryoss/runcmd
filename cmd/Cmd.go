@@ -36,7 +36,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			//viper args
 			utils.AppendFile("command_info_logger.txt",
-				cmd.Use+" --cid="+cid+" --args=\""+arguments+"\""+"--enableStreams="+strconv.FormatBool(enableStreams)+"\n")
+				cmd.Use+" --cid="+cid+" --args=\""+arguments+"\""+" --enableStreams="+strconv.FormatBool(enableStreams)+"\n")
 			utils.CreateDir(constants.CMD_BACKGROUND_DIR)
 			utils.CreateDir(constants.CMD_BACKGROUND_STREAMS_DIR)
 			outputJsonFile := fmt.Sprintf(constants.CMD_BACKGROUND_OUTPUT, cid)
